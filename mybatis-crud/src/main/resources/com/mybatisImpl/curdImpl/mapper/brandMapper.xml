@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatisImpl.curdImpl.mapper.BrandMapper">
+    <!--    解决数据库表中字段名和实体类中属性名称不一样导致的不能自动封装数据   -->
+    <!--    方案一：起别名-->
+    <!--    <select id="selectAll" resultType="brand">-->
+    <!--        SELECT id, brand_name AS brandName, company_name AS companyName, ordered, description, status-->
+    <!--        FROM tb_brand;-->
+    <!--    </select>-->
+    <!--    方案二：sql片段-->
+    <!--    <sql id="brand_column">id-->
+    <!--    , brand_name AS brandName,company_name AS companyName,ordered,description,status</sql>-->
+    <!--    -->
+    <!--    <select id="selectAll1" resultType="brand">-->
+    <!--        SELECT-->
+    <!--        <include refid="brand_column"/>-->
+    <!--        FROM tb_brand;-->
+    <!--    </select>-->
+    <!--    -->
+
+    <!--使用resultMap方式来完成映射-->
+    <resultMap id="brandResultMap" type="brand">
+        <result column="brand_name" property="brandName"/>  <!-- result是普通的列名，id是主键映射-->
+        <result column="company_name" property="companyName"/>
+    </resultMap>
+    <select id="selectAll" resultMap="brandResultMap">
+        SELECT *
+        FROM tb_brand;
+    </select>
+    <select id="selectById" parameterType="int" resultMap="brandResultMap">
+        SELECT * FROM tb_brand WHERE id=#{id};
+    </select>
+<!--    <select id="selectByCondition" resultMap="brandResultMap">-->
+<!--        SELECT * FROM tb_brand-->
+<!--        WHERE status = #{status}-->
+<!--        AND company_name LIKE #{companyName}-->
+<!--        AND brand_name LIKE #{brandName}-->
+<!--    </select>-->
+
+<!--动态SQL条件查询语句1:使用if语句-->
+    <select id="selectByCondition" resultMap="brandResultMap">
+        SELECT * FROM tb_brand
+        WHERE
+        <if test="status !=null">
+            status = #{status}
+        </if>
+        <if test="companyName != null and companyName != ''">
+            AND company_name LIKE #{companyName}
+        </if>
+        <if test="brandName!= null and brandName!=''">
+            AND brand_name LIKE #{brandName}
+        </if>
+    </select>
+
+</mapper>

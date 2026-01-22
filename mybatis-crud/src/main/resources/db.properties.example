@@ -1,0 +1,9 @@
+# 数据库连接配置示例
+# 使用说明：
+# 1. 复制此文件为 db.properties
+# 2. 修改下面的配置为你的实际数据库信息
+
+db.driver=com.mysql.jdbc.Driver
+db.url=jdbc:mysql://localhost:3306/mybatis?useSSL=false
+db.username=root
+db.password=your_password_here
