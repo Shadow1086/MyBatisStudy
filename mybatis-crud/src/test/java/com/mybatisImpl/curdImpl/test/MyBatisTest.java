@@ -147,4 +147,25 @@ public class MyBatisTest {
         brandMapper.update(brand);
         sqlSession.close();
     }
+    /**
+    * 删除用户
+    */
+    @Test
+    public void deleteSingle(){
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        BrandMapper brandMapper = sqlSession.getMapper(BrandMapper.class);
+        brandMapper.deleteSingle(6);
+        sqlSession.close();
+    }
+    /**
+    * 批量删除用户
+    */
+    @Test
+    public void delete(){
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        BrandMapper brandMapper = sqlSession.getMapper(BrandMapper.class);
+        int[] ids= {1,2,3};
+        brandMapper.delete(ids);
+        sqlSession.close();
+    }
 }

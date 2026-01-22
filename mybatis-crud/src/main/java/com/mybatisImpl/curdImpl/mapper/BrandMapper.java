@@ -33,4 +33,8 @@ public interface BrandMapper {
     //修改用户全部字段信息
     void update(Brand brand);
 
+    //根据id删除用户
+    void deleteSingle(int id);
+    //批量删除用户
+    void delete(@Param("ids")int[] ids);
 }

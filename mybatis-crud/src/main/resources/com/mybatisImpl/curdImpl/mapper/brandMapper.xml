@@ -109,4 +109,19 @@
         </set>
         WHERE id = #{id};
     </update>
+<!--    根据ID删除单个-->
+    <delete id="deleteSingle">
+        DELETE
+        FROM tb_brand
+        WHERE id = #{id}
+    </delete>
+<!--    批量删除-->
+    <delete id="delete">
+        DELETE FROM tb_brand
+        WHERE id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
 </mapper>

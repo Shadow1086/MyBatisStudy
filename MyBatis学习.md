@@ -440,6 +440,7 @@ MyBatis对动态SQL有很强大的支撑；
 #### 修改动态字段
 
 使用`set`和`if`标签来动态修改
+
 ```xml
 
 <update id="updateNotAll">
@@ -463,4 +464,40 @@ MyBatis对动态SQL有很强大的支撑；
     </set>
     WHERE id = #{id};
 </update>
+```
+
+### 删除功能
+
+#### 删除一个
+
+省略，无特殊点
+
+#### 批量删除
+
+**步骤：**
+
+1. 编写接口方法：
+    - 参数：id数组
+    - 结果：void
+2. 编写SQL语句：SQL映射文件
+3. 执行方法，测试
+
+**使用`foreach`遍历：**
+
+- `collection`:遍历的数组
+    - 而`MyBatis`会讲数组参数封装为一个map集合：
+        - 默认：`key=array`,`value = 数组`
+        - 使用`@Param`就可以改变`map`集合中默认的key的名称，`collection='ids'`即可
+- `separator`:字符串的拼接，使用,来连接数组中的各个元素
+- `open/close`:在开头和结尾添加`(`/`)`
+
+```xml
+
+<delete id="delete">
+    DELETE FROM tb_brand
+    WHERE id in
+    <foreach collection="array" item="id" separator="," open="(" close=")">
+        #{id}
+    </foreach>
+</delete>
 ```
