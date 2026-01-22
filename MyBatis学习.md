@@ -375,13 +375,15 @@ MyBatis对动态SQL有很强大的支撑；
         <when test="brandName!=null and brandName!=''">
             brand_name = #{brandName}
         </when>
-<!--        <otherwise>    &lt;!&ndash;相当于switch中的default&ndash;&gt;-->
-<!--            1 = 1-->
-<!--        </otherwise>-->
+        <!--        <otherwise>    &lt;!&ndash;相当于switch中的default&ndash;&gt;-->
+        <!--            1 = 1-->
+        <!--        </otherwise>-->
     </choose>
 </select>
 ```
+
 **说明：** 上述代码在用户一个参数也没有传递的时候会报错，所以可以使用下面的：
+
 ```xml
 
 <select id="selectByConditionSingle" resultMap="brandResultMap">
@@ -401,3 +403,35 @@ MyBatis对动态SQL有很强大的支撑；
     </where>
 </select>
 ```
+
+### 添加
+
+**步骤：**
+
+1. 编写接口方法：Mapper接口
+    - 参数：处理id意外的所有数据
+    - 结果：void
+2. 编写SQL语句：SQL映射文件
+3. 执行方法，测试
+
+**MyBatis事务：**
+
+- openSession():默认开启事物，进行增删改操作后需要使用sqlSession.commint();手动提交事务
+- openSession(true):可以设置为自动提交事务(关闭事务)
+
+**主键回显：**
+ 
+在`<insert>`标签中添加`useGeneratedKeys = true`和`keyProperty=id`，即可
+
+```xml
+
+<insert id="add" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tb_brand (brand_name, company_name, ordered, description, status)
+    VALUES (#{brandName}, #{companyName}, #{ordered}, #{description}, #{status});
+</insert>
+```
+
+### 修改
+
+#### 修改全部字段
+

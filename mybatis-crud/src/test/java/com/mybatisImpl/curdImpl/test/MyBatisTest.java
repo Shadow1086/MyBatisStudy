@@ -54,6 +54,9 @@ public class MyBatisTest {
         sqlSession.close();
     }
 
+    /**
+    * 测试多条件查询的SQL动态语句
+    */
     @Test
     public void testSelectByCondition() {
         SqlSession sqlSession = sqlSessionFactory.openSession();
@@ -65,7 +68,6 @@ public class MyBatisTest {
         //处理参数
         companyName = "%" + companyName + "%";
         brandName = "%" + brandName + "%";
-
 
         // 散装参数：
         List<Brand> brands = brandMapper.selectByCondition(status, companyName, brandName);
@@ -85,6 +87,9 @@ public class MyBatisTest {
         System.out.println(brands);
         sqlSession.close();
     }
+    /**
+    * 测试单个条件的查询
+    */
     @Test
     public void testSelectConditionSingle(){
         SqlSession sqlSession = sqlSessionFactory.openSession();
@@ -100,5 +105,28 @@ public class MyBatisTest {
         brand.setCompanyName(companyName);
         List<Brand> brands = brandMapper.selectByConditionSingle(brand);
         System.out.println(brands);
+    }
+    /**
+    * 测试添加功能的SQL语句
+    */
+    @Test
+    public void testAdd(){
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        //设置自动提交事务,就不需要写之后的sqlSession.commit();l
+        //SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        BrandMapper brandMapper = sqlSession.getMapper(BrandMapper.class);
+
+        int status = 1;
+        String companyName = "波导手机";
+        String brandName = "波导";
+        String description = "波导手机，手机中的战斗机";
+        int ordered = 100;
+        Brand brand = new Brand(brandName,companyName,ordered,description,status);
+
+        brandMapper.add(brand);
+        System.out.println(brand.getId());
+        //提交事务
+        sqlSession.commit();
+        sqlSession.close();
     }
 }
