@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- 写一个根标签：namespace 指定当前mapper的命名空间 -->
+<mapper namespace="com.mybatis.mapper.UserMapper">
+  <!-- 根据所要操作的表 改写命名空间和编写SQL语句 -->
+  <select id="selectAll" resultType="user">
+    select * from tb_user;
+  </select>
+  <!-- 写增删改查的SQL语句 -->
+</mapper>
