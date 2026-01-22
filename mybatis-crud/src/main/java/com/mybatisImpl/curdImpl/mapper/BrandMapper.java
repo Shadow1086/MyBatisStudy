@@ -29,4 +29,8 @@ public interface BrandMapper {
 
 // 添加
     void add(Brand brand);
+
+    //修改用户全部字段信息
+    void update(Brand brand);
+
 }

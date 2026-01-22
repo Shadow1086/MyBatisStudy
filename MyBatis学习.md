@@ -420,7 +420,7 @@ MyBatis对动态SQL有很强大的支撑；
 - openSession(true):可以设置为自动提交事务(关闭事务)
 
 **主键回显：**
- 
+
 在`<insert>`标签中添加`useGeneratedKeys = true`和`keyProperty=id`，即可
 
 ```xml
@@ -435,3 +435,32 @@ MyBatis对动态SQL有很强大的支撑；
 
 #### 修改全部字段
 
+省略，没有特殊点
+
+#### 修改动态字段
+
+使用`set`和`if`标签来动态修改
+```xml
+
+<update id="updateNotAll">
+    UPDATE tb_brand
+    <set>
+        <if test="brandName!=null and brandName!=''">
+            brand_name = #{brandName},
+        </if>
+        <if test="companyName!=null and companyName!=''">
+            company_name = #{companyName},
+        </if>
+        <if test="ordered!=null">
+            ordered = #{ordered},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="status!=null">
+            status = #{status}
+        </if>
+    </set>
+    WHERE id = #{id};
+</update>
+```

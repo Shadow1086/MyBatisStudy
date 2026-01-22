@@ -77,5 +77,36 @@
         INSERT INTO tb_brand (brand_name, company_name, ordered, description, status)
         VALUES (#{brandName}, #{companyName}, #{ordered}, #{description}, #{status});
     </insert>
-
+<!--修改全部字段-->
+    <update id="update">
+        UPDATE tb_brand
+        SET brand_name   = #{brandName},
+            company_name = #{companyName},
+            ordered      = #{ordered},
+            description  = #{description},
+            status       = #{status}
+        WHERE id = #{id};
+    </update>
+<!--动态修改-->
+    <update id="updateNotAll">
+        UPDATE tb_brand
+        <set>
+            <if test="brandName!=null and brandName!=''">
+                brand_name = #{brandName},
+            </if>
+            <if test="companyName!=null and companyName!=''">
+                company_name = #{companyName},
+            </if>
+            <if test="ordered!=null">
+                ordered = #{ordered},
+            </if>
+            <if test="description!=null and description!=''">
+                description = #{description},
+            </if>
+            <if test="status!=null">
+                status = #{status}
+            </if>
+        </set>
+        WHERE id = #{id};
+    </update>
 </mapper>

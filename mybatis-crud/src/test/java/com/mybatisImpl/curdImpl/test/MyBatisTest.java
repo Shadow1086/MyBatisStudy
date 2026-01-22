@@ -129,4 +129,22 @@ public class MyBatisTest {
         sqlSession.commit();
         sqlSession.close();
     }
+
+    /**
+    * 更新品牌全部字段信息
+    */
+    @Test
+    public void update(){
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        BrandMapper brandMapper = sqlSession.getMapper(BrandMapper.class);
+        int status = 1;
+        String companyName = "波导手机";
+        String brandName = "波导";
+        String description = "手机中的战斗机";
+        int ordered = 200;
+        int id = 6;
+        Brand brand = new Brand(id,brandName,companyName,ordered,description,status);
+        brandMapper.update(brand);
+        sqlSession.close();
+    }
 }
