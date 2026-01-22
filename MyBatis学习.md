@@ -501,3 +501,76 @@ MyBatis对动态SQL有很强大的支撑；
     </foreach>
 </delete>
 ```
+
+## MyBatis的参数传递
+
+MyBatis接口方法中可以接受各种各样的参数，底层对于这些参数会进行不同的封装处理方式：
+
+- 单个参数：
+    1. POJO类型: 直接使用，属性名和SQL参数的占位符名称一致
+    2. Map集合:直接使用，键名和参数占位符名称一致即可
+    3. Collection:封装为map集合，
+       map.put("arg0",collection集合);
+       map.put("collection",collection集合)
+    4. List:
+       map.put("arg0",list集合);
+       map.put("collection",list集合);
+       map.put("list",list集合);
+    5. Array:封装为map集合
+       map.put("arg0","数组");
+       map.put("array","数组");
+    6. 其他类型:直接使用
+- 多个参数：封装为map集合,可以使用@Param注解，替换Map集合中默认的arg键名
+
+map.put("arg0",参数值1);
+map.put("param1",参数值1);
+map.put("arg1",参数值2);
+map.put("param2",参数值2);
+---------使用@Param来注解username后：
+map.put("username",参数值1);
+map.put("param1",参数值1);
+map.put("arg1",参数值2);
+map.put("param2",参数值2);
+
+当有多个参数的时候，我们可以不使用@Param来注解，如下：
+
+```java
+User select(String username, String password);
+```
+
+```xml
+
+<select id="select" resultType="User">
+    SELECT * FROM tb_user
+    <where>
+        <if test="username!=null and username!=''">
+            and username = #{param1}  <!--#{arg0}也是可以的，下面的也一样-->
+        </if>
+        <if test="password!=null and password!=''">
+            and password = #{param2}
+        </if>
+    </where>
+</select>
+```
+
+**MyBatis提供了ParamNameResolver类来进行参数的封装，也就是使用的@Param注解**
+
+### 使用注解来完成增删改查
+
+使用注解会比使用配置文件更加方便
+
+```java
+
+@Select("select * from tb_user where id=#{id}")
+public User selectById(int id);
+```
+
+- 查询：@Select
+- 添加: @Insert
+- 修改：@Update
+- 删除：@Delete
+
+**建议：**
+
+- 使用注解来完成简单的功能，不能使用动态sql语句
+- 使用配置文件来完成复杂功能
