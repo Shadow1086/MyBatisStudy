@@ -54,4 +54,22 @@
         </if>
     </select>
 
+    <select id="selectByConditionSingle" resultMap="brandResultMap">
+        SELECT * FROM tb_brand
+        WHERE
+        <choose><!--相当于java 中的switch-->
+            <when test="status!=null">    <!--相当于switch中的case-->
+                status = #{status}
+            </when>
+            <when test="companyName!=null and companyName!=''">
+                company_name LIKE #{companyName}
+            </when>
+            <when test="brandName!=null and brandName!=''">
+                brand_name LIKE #{brandName}
+            </when>
+            <otherwise>    <!--相当于switch中的default-->
+                1 = 1
+            </otherwise>
+        </choose>
+    </select>
 </mapper>

@@ -85,4 +85,20 @@ public class MyBatisTest {
         System.out.println(brands);
         sqlSession.close();
     }
+    @Test
+    public void testSelectConditionSingle(){
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        BrandMapper brandMapper = sqlSession.getMapper(BrandMapper.class);
+
+//        int status = 1;
+        String companyName = "华为";
+//        String brandName = "华为";
+        //处理参数
+        companyName = "%" + companyName + "%";
+//        brandName = "%" + brandName + "%";
+        Brand brand = new Brand();
+        brand.setCompanyName(companyName);
+        List<Brand> brands = brandMapper.selectByConditionSingle(brand);
+        System.out.println(brands);
+    }
 }

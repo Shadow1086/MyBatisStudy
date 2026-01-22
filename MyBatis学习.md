@@ -309,17 +309,23 @@ MyBatis对动态SQL有很强大的支撑；
 
 **说明：**
 
-1. 使用if标签，其中test是判断条件
-2. test中的与为英文单词and
+1. 使用`if`标签，其中`test`是逻辑表达式
+2. `test`中的与为英文单词`and`
 3. 判断的值应该为参数名称
+
+**问题：**
+
+1. 当存在多个条件时，若第一个条件的参数为空，那么就会变成`WHERE AND ...`这样的语法是不符合规则的
+2. 解决：
+    - 增加一个恒等式，比如`1=1`
 
 ```xml
 
 <select id="selectByCondition" resultMap="brandResultMap">
     SELECT * FROM tb_brand
-    WHERE
+    WHERE 1 = 1
     <if test="status !=null">
-        status = #{status}
+        AND status = #{status}
     </if>
     <if test="companyName != null and companyName != ''">
         AND company_name LIKE #{companyName}
@@ -327,5 +333,71 @@ MyBatis对动态SQL有很强大的支撑；
     <if test="brandName!= null and brandName!=''">
         AND brand_name LIKE #{brandName}
     </if>
+</select>
+```
+
+- 通过\<where>标签替换where关键字
+
+```xml
+
+<select id="selectByCondition" resultMap="brandResultMap">
+    SELECT * FROM tb_brand
+    <where>
+        <if test="status !=null">
+            AND status = #{status}
+        </if>
+        <if test="companyName != null and companyName != ''">
+            AND company_name LIKE #{companyName}
+        </if>
+        <if test="brandName!= null and brandName!=''">
+            AND brand_name LIKE #{brandName}
+        </if>
+    </where>
+</select>
+```
+
+### 单条件动态查询 -- choose(when,otherwise)
+
+**说明：** 从多个条件中选择一个
+
+```xml
+
+<select id="selectByConditionSingle" resultMap="brandResultMap">
+    SELECT * FROM tb_brand
+    WHERE
+    <choose><!--相当于java 中的switch-->
+        <when test="status!=null">    <!--相当于switch中的case-->
+            status = #{status}
+        </when>
+        <when test="companyName!=null and companyName!=''">
+            company_name = #{companyName}
+        </when>
+        <when test="brandName!=null and brandName!=''">
+            brand_name = #{brandName}
+        </when>
+<!--        <otherwise>    &lt;!&ndash;相当于switch中的default&ndash;&gt;-->
+<!--            1 = 1-->
+<!--        </otherwise>-->
+    </choose>
+</select>
+```
+**说明：** 上述代码在用户一个参数也没有传递的时候会报错，所以可以使用下面的：
+```xml
+
+<select id="selectByConditionSingle" resultMap="brandResultMap">
+    SELECT * FROM tb_brand
+    <where>
+        <choose><!--相当于java 中的switch-->
+            <when test="status!=null">    <!--相当于switch中的case-->
+                status = #{status}
+            </when>
+            <when test="companyName!=null and companyName!=''">
+                company_name = #{companyName}
+            </when>
+            <when test="brandName!=null and brandName!=''">
+                brand_name = #{brandName}
+            </when>
+        </choose>
+    </where>
 </select>
 ```
