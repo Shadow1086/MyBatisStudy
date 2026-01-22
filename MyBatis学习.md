@@ -304,3 +304,28 @@ MyBatis对动态SQL有很强大的支撑；
 2. choose(when,otherwise)
 3. trim(where,set)
 4. foreach
+
+##### if判断：
+
+**说明：**
+
+1. 使用if标签，其中test是判断条件
+2. test中的与为英文单词and
+3. 判断的值应该为参数名称
+
+```xml
+
+<select id="selectByCondition" resultMap="brandResultMap">
+    SELECT * FROM tb_brand
+    WHERE
+    <if test="status !=null">
+        status = #{status}
+    </if>
+    <if test="companyName != null and companyName != ''">
+        AND company_name LIKE #{companyName}
+    </if>
+    <if test="brandName!= null and brandName!=''">
+        AND brand_name LIKE #{brandName}
+    </if>
+</select>
+```
